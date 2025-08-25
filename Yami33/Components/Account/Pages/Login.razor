@@ -1,0 +1,93 @@
+﻿@page "/account/login"
+@inject IJSRuntime JSRuntime  
+@using Microsoft.JSInterop  
+@inject IJSRuntime JSRuntime
+
+@inject IAuthService AuthService
+@inject CustomAuthStateProvider AuthStateProvider
+
+
+
+
+
+<div class="mt-3">
+
+    <h3>Login</h3>
+    <input @bind="Username" placeholder="Username" />
+    <input @bind="Password" type="password" placeholder="Password" />
+    <button @onclick="Login1">Login</button>
+
+
+    <br />
+    <br />
+
+    <button class="btn btn-primary mt-2" @onclick="ReadChannelMessagesAsync2" >test Message Box </button>
+
+   
+
+    <br />
+
+
+    <div>@testMessage</div>
+</div>
+
+<div  class="row">
+
+    @if (IsProcessing)  
+    {  
+
+
+         <div class="alert alert-success">login  has been shown successfully!</div>
+    }  
+    else  
+    {
+        <div class="position-absolute w-75 h-75 d-flex flex-column align-items-center bg-white justify-content-center">
+            <img src="/images/loading.gif" alt="loading" />
+        </div>
+    }
+
+
+</div>
+<script>
+    function showAlert(message) {
+        alert(message);
+        return false;
+    }
+</script>
+@code {
+
+    private string Username = "admin";
+    private string Password = "123";
+
+
+    private bool IsProcessing { get; set; } = false;  
+
+
+
+    private string testMessage;
+    private async Task ReadChannelMessagesAsync2()
+    {
+        await JSRuntime.InvokeAsync<bool>("showAlert", "HI");
+    }
+
+
+
+    private async Task Login1()
+    {
+        var token = await AuthService.LoginAsync(Username, Password);
+        if (!string.IsNullOrEmpty(token))
+        {
+         //   AuthStateProvider.SetToken(token);
+            AuthStateProvider.SetTokenAsync(token);
+
+
+            testMessage = "Logged in!";
+            IsProcessing = true;
+        }
+        else
+        {
+            testMessage = "Login failed.";
+            
+        }
+    }
+}

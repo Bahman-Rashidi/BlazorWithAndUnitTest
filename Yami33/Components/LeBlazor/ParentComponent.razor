@@ -1,0 +1,53 @@
+﻿@page "/LeBlazor/ParentComponent"
+
+
+<h3>ParentComponent</h3>
+<br />
+
+<h3>Message is = @message</h3>
+
+<br />
+<div>
+    @if (receivedUser != null)
+    {
+        <div class="alert alert-info">
+            <p>داده دریافت شد:</p>
+            <p><strong>نام:</strong> @receivedUser.name</p>
+            <p><strong>سن:</strong> @receivedUser.age</p>
+        </div>
+    }
+</div>
+<br />
+<CascadingValue Value="@Messagc" Name="MessageCCC">
+    <CascadingValue Value="@MessagAc" Name="Messagezzz">
+        <ChildeComponent OnUserAdded="HandleUserAdded" OnButtonClick="UpdateMessage1" Title="Comes Frome Parent">
+            <ChildContent>ChildContent</ChildContent>
+            <SomeChildContent>SomeChildContent</SomeChildContent>
+        </ChildeComponent>
+    </CascadingValue>
+</CascadingValue>
+
+@code {
+
+    private string MessagAc = "MessagAc  From ParentComponent";
+    private string Messagc = "MessaAc From ParentComponent cccccc";
+    private string message;
+    private void UpdateMessage(string msg)
+    {
+        message = msg;
+    }
+    private void UpdateMessage1()
+    {
+        message = "UpdateMessage 1 ";
+    }
+
+
+
+    private testUser receivedUser;
+
+    // متد فراخوانی شده از ChildComponent
+    private void HandleUserAdded(testUser user)
+    {
+        receivedUser = user;
+    }
+}

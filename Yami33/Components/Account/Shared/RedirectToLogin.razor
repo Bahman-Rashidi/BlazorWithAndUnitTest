@@ -1,0 +1,55 @@
+﻿@* @inject NavigationManager NavigationManager
+
+@code {
+    protected override void OnInitialized()
+    {
+      //  NavigationManager.NavigateTo($"Account/Login?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}", forceLoad: true);
+
+        // NavigationManager.NavigateTo("https://www.varzesh3.com/", forceLoad: true);
+
+        var currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri).ToLower();
+        if (!currentUrl.StartsWith("account/login"))
+        {
+            var returnUrl = Uri.EscapeDataString(NavigationManager.Uri);
+            NavigationManager.NavigateTo($"/account/login?returnUrl={returnUrl}");
+        }
+    }
+}
+ *@
+
+@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
+<AuthorizeView>
+    <NotAuthorized>
+        <p>در حال انتقال به صفحه لاگین...</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private bool _shouldRedirect;
+    private string? _returnUrl;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity?.IsAuthenticated ?? true)
+        {
+            _returnUrl = Navigation.ToBaseRelativePath(Navigation.Uri);
+            _shouldRedirect = true;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && _shouldRedirect)
+        {
+          //  Navigation.NavigateTo($"/Account/Login?returnUrl={_returnUrl}", forceLoad: true);
+
+            var targetUrl = string.IsNullOrEmpty(_returnUrl) ? "/Account/Login" : $"/Account/Login?returnUrl={_returnUrl}";
+            Navigation.NavigateTo(targetUrl, forceLoad: true);
+        }
+    }
+}

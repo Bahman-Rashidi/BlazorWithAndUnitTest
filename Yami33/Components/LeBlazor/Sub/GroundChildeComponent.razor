@@ -1,0 +1,23 @@
+﻿<h3>GroundChildeComponent</h3>
+<div>
+    <h1>      Messagezzz  =  @Messagezzz</h1>
+
+
+
+ </div>
+<div>
+    <h1>      MessageCCC  =  @MessageCCC</h1>
+</div>
+@code {
+    [CascadingParameter(Name = "Messagezzz")]
+      public string Messagezzz { get; set; }
+
+
+
+    [CascadingParameter(Name = "MessageCCC")]
+    public string MessageCCC { get; set; }
+
+    [Parameter]
+     public string MessageFroGroundChiled { get; set; }
+
+}

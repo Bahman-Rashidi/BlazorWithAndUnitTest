@@ -1,0 +1,59 @@
+﻿
+<div class="alert  ">
+
+    <h3>@Title</h3>
+</div>
+
+<GroundChildeComponent MessageFroGroundChiled="Hi Ground"></GroundChildeComponent>
+<h3>Hi</h3>
+<br />
+<div>
+    <h1>@ChildContent</h1>
+</div>
+<div>
+    <button class="btn btn-primary"
+            @onclick="OnButtonClick">
+        Change Title
+    </button>
+</div>
+
+<div>
+    <button class="btn btn-primary"
+            @onclick="OnButtonClick2">
+        Change Title 2
+    </button>
+</div>
+
+<div>
+   @*  <h1>      clide  =  @MessagAc</h1> *@
+</div>
+@code {
+
+    private async void OnButtonClick2()
+    {
+
+        var user = new testUser
+        {
+            name = "ALI",
+            age = 30
+        };
+        await OnUserAdded.InvokeAsync(user);
+
+    }
+    // [CascadingParameter]
+    // public string MessagAc { get; set; }
+    
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public RenderFragment SomeChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback OnButtonClick { get; set; }
+    [Parameter]
+    public EventCallback<testUser> OnUserAdded { get; set; }
+}
